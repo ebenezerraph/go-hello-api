@@ -50,7 +50,7 @@ func init() {
  
 	port = os.Getenv("PORT")
 	if port == "" {
-	    port = "8080"
+	    port = "8000"
 	    log.Println("PORT not set, using default:", port)
 	}
 }
