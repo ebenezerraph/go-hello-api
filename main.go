@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -65,13 +67,18 @@ func getJSON(url string, target interface{}) error {
 	return json.NewDecoder(resp.Body).Decode(target)
 }
 
-func getClientIP() (string, error) {
-	var ipResp struct {
-		IP string `json:"ip"`
+func getClientIP(r *http.Request) string {
+	ip := r.Header.Get("X-Forwarded-For")
+	if ip != "" {
+	    return strings.Split(ip, ",")[0]
 	}
-	err := getJSON(ipifyURL, &ipResp)
-	return ipResp.IP, err
-}
+	
+	ip, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+	    return r.RemoteAddr
+	}
+	return ip
+ }
 
 func getLocation(ip string) (IPAPIResponse, error) {
 	var location IPAPIResponse
@@ -89,38 +96,30 @@ func getWeather(lat, lon float64) (float64, error) {
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	visitorName := r.URL.Query().Get("visitor_name")
 	if visitorName == "" {
-		visitorName = "Guest"
+	    visitorName = "Guest"
 	}
-
-	var (
-		clientIP string
-		err      error
-	)
-	clientIP, err = getClientIP()
-	if err != nil {
-		http.Error(w, "Error getting client IP", http.StatusInternalServerError)
-		return
-	}
-
+ 
+	clientIP := getClientIP(r)
+ 
 	location, err := getLocation(clientIP)
 	if err != nil {
-		http.Error(w, "Error getting location", http.StatusInternalServerError)
-		return
+	    http.Error(w, "Error getting location", http.StatusInternalServerError)
+	    return
 	}
-
+ 
 	temp, err := getWeather(location.Lat, location.Lon)
 	if err != nil {
-		http.Error(w, "Error getting weather", http.StatusInternalServerError)
-		return
+	    http.Error(w, "Error getting weather", http.StatusInternalServerError)
+	    return
 	}
-
+ 
 	response := Response{
-		ClientIP: clientIP,
-		Location: fmt.Sprintf("%s, %s", location.City, location.Country),
-		Greeting: fmt.Sprintf("Hello, %s! The temperature is %.1f degrees Celsius in %s, %s",
-			visitorName, temp, location.City, location.Country),
+	    ClientIP: clientIP,
+	    Location: fmt.Sprintf("%s, %s", location.City, location.Country),
+	    Greeting: fmt.Sprintf("Hello, %s! The temperature is %.1f degrees Celsius in %s, %s",
+	    visitorName, temp, location.City, location.Country),
 	}
-
+ 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
