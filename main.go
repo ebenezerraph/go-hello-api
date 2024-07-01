@@ -39,19 +39,19 @@ var openWeatherAPIKey string
 var port string
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("Error loading .env file")
+	if err := godotenv.Load(); err != nil {
+	    log.Println("No .env file found, using system environment variables")
 	}
 	
 	openWeatherAPIKey = os.Getenv("OPENWEATHER_API_KEY")
 	if openWeatherAPIKey == "" {
-		log.Fatal("OPENWEATHER_API_KEY environment variable not set")
+	    log.Fatal("OPENWEATHER_API_KEY environment variable not set")
 	}
-
+ 
 	port = os.Getenv("PORT")
 	if port == "" {
-		log.Fatal("PORT variable not set")
+	    port = "8080"
+	    log.Println("PORT not set, using default:", port)
 	}
 }
 
