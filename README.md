@@ -7,7 +7,7 @@ This project demonstrates a basic web server that exposes an API endpoint, writt
 This was one of the tasks given to me at [HNG](https://www.hng.tech/) Internship 11.
 
 # Live Demo
-Access the live demo [here](https://go-hello-api-production.up.railway.app/api/hello?visitor_name=Name).
+Access the live demo [here](https://go-hello-api.up.railway.app/api/hello?visitor_name=Name).
 
 # Endpoint
 `[GET] /api/hello?visitor_name="Name"`
