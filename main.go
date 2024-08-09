@@ -1,3 +1,6 @@
+// WARNING!
+// This code was written with the help of and refactored by Claude!
+
 package main
 
 import (
