@@ -1,18 +1,18 @@
 # Go Hello API
 A simple API project built with Go.
 
-# Overview
+## Overview
 This project demonstrates a basic web server that exposes an API endpoint, written in Go.
 
 This was one of the tasks given to me at [HNG](https://www.hng.tech/) Internship 11.
 
-# Live Demo
+## Live Demo
 Access the live demo [here](https://go-hello-api.up.railway.app/api/hello?visitor_name=Name).
 
-# Endpoint
+## Endpoint
 `[GET] /api/hello?visitor_name="Name"`
 
-# Response
+## Response
 You should get this as a response:
 
 ```
