@@ -2,8 +2,9 @@
 A simple API project built with Go.
 
 ![](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+
 ## Overview
-This project shows how to write a simple Go web server that exposes an API endpoint.
+This project is a simple Go web server that exposes an API endpoint.
 
 > This was one of the tasks assigned to us during the [HNG](https://www.hng.tech/) Internship 11 — no, I didn't make it to the finals. 🙃
 
